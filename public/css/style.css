@@ -1,0 +1,224 @@
+/* ==========================================================================
+   CSS Custom Properties
+   ========================================================================== */
+
+:root {
+  --bg-primary: #282A36;
+  --bg-secondary: #44475A;
+  --accent: #bd93f9;
+  --text-primary: #ffffff;
+  --border: #f9f9f9;
+  --transition: all 0.2s ease;
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  max-width: 650px;
+  line-height: 1.5;
+  margin: 0 auto;
+  padding: 1rem;
+  word-wrap: break-word;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+h2 {
+  display: inline-block;
+  color: var(--text-primary);
+  background-color: var(--accent);
+  margin-bottom: 0;
+  margin-top: 0;
+  padding: 0.3rem;
+}
+
+blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* ==========================================================================
+   Code Blocks
+   ========================================================================== */
+
+code {
+  font-family: 'Monaco', 'Inconsolata', 'Consolas', monospace;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border-radius: 0.2rem;
+  padding: 0.1rem 0.3rem;
+}
+
+pre {
+  border: 2px solid var(--border);
+  padding: 0.5rem;
+  overflow: auto;
+  border-radius: 0.2rem;
+  background-color: var(--bg-secondary);
+}
+
+/* Fallback for browsers without :has() support */
+pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Modern browsers with :has() support */
+pre:has(code) {
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+a {
+  cursor: pointer;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--text-primary);
+  background-color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+
+a:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 0.2rem;
+}
+
+/* ==========================================================================
+   Layout Components
+   ========================================================================== */
+
+header {
+  margin-bottom: 2rem;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.navbar span {
+  font-family: 'Monaco', 'Inconsolata', 'Consolas', Courier, monospace;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.navbar a {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   Blog Components
+   ========================================================================== */
+
+.blog {
+  list-style-type: none;
+  padding: 0;
+}
+
+.blog li {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.blog span {
+  min-width: 6rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Media & Tables
+   ========================================================================== */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  text-align: left;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--bg-secondary);
+}
+
+table th {
+  background-color: var(--bg-secondary);
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  body {
+    padding: 0.5rem;
+  }
+  
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .navbar span {
+    font-size: 1.2rem;
+  }
+  
+  .blog li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .blog span {
+    min-width: auto;
+    margin-bottom: 0.25rem;
+  }
+}
