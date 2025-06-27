@@ -35,6 +35,7 @@ jobs:
       - name: Generate static files
         run: |
           python bloggen.py
+          cp -r public/ build/
           echo "Build complete!"
           
       - name: Configure git
