@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="dark light">
+	<title>Running ROS Across Multiple Machines</title>
+	<link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+	<header>
+		<nav class="navbar">
+			<span>/home/erdo.dev</span>
+			<ul>
+				<li><a href="/">About me</a></li>
+				<li><a href="/blog">Blog</a></li>
+			</ul>
+		</nav>
+		<hr>
+	</header><h1>Running ROS Across Multiple Machines</h1>
+<p>15 Apr 2022</p>
+<p>The Robot Operating System (ROS) is an open-source framework widely used in robotics research and development for building, developing, and deploying robot software. In both development and deployment, there may be situations where you need to access a robot's computational resources remotely. For example, in multi-robot systems, individual robots often need to communicate over a shared network to collaboratively solve tasks. To enable this, ROS instances running on different machines must be configured to communicate, provided that all machines are connected to the same network.</p>
+<p>This tutorial will walk you through the process of setting up ROS to communicate over a local area network (LAN) with multiple machines. This setup is useful for creating a network of machines - whether they represent robots or workstations - working together under ROS.</p>
+<h2>Configuring ROS for LAN Communication</h2>
+<p>To properly configure ROS across multiple machines in a LAN, consider the following key points:
+* Only one master is needed, so choose a single machine to run <code>roscore</code>.
+* All nodes must be set to use the same master by configuring the <code>ROS_MASTER_URI</code> environment variable.
+* Bi-directional connectivity between all machines is crucial for communication.
+* Each machine must advertise itself using a hostname that all other machines can resolve.</p>
+<p>For example, let's say you're connecting your workstation to a robot to retrieve and store sensor readings. In this setup, we'll refer to the machines as the robot (master) and the workstation (slave). The robot and workstation will have symbolic IP addresses of <code>192.168.0.1</code> and <code>192.168.0.2</code>, respectively.</p>
+<h3>Testing Network Connectivity</h3>
+<p>To verify that both the master and slave are connected to the same network, you can use the <code>ping</code> command. Open a terminal on either machine and ping the IP address of the other device to check connectivity.</p>
+<p><strong>Robot (master):</strong></p>
+<pre class="codehilite"><code>ping 192.168.0.2
+</code></pre>
+
+<p><strong>Workstation (slave):</strong></p>
+<pre class="codehilite"><code>ping 192.168.0.1
+</code></pre>
+
+<h3>Testing Port Connectivity</h3>
+<p>For full connectivity, machines must be able to communicate over all necessary ports. To ensure this, you can use the <code>netcat</code> (<code>nc</code>) command in the terminal of either machine as shown below:</p>
+<p><strong>Robot (master):</strong></p>
+<pre class="codehilite"><code>netcat -l 1234
+netcat 192.168.0.2
+</code></pre>
+
+<p><strong>Workstation (slave):</strong> </p>
+<pre class="codehilite"><code>netcat -l 1234
+netcat 192.168.0.1
+</code></pre>
+
+<h3>Configuring Name Resolution</h3>
+<p>For machines to communicate effectively over the network, they must have addressable names, typically in the form of hostnames. Follow the steps below to configure name resolution from the terminal of each machine:</p>
+<p><strong>Robot (master):</strong></p>
+<pre class="codehilite"><code>export ROS_IP=192.168.0.1
+export ROS_HOSTNAME=192.168.0.1
+</code></pre>
+
+<p><strong>Workstation (slave):</strong></p>
+<pre class="codehilite"><code>export ROS_IP=192.168.0.2
+export ROS_HOSTNAME=192.168.0.2
+</code></pre>
+
+<p>Alternatively, you can modify the <code>/etc/hosts</code> file on each machine to manually associate hostnames with their corresponding IP addresses. This file serves as a local directory that instructs each machine on how to resolve specific hostnames into IP addresses, ensuring reliable communication between machines on the network.</p>
+<pre class="codehilite"><code>sudo nano /etc/hosts
+192.168.0.1 robot
+192.168.0.2 workstation
+</code></pre>
+
+<p>Now, we can refer to the machines by their hostnames, robot and workstation, for communication.</p>
+<h2>Connecting Machines in LAN</h2>
+<p>Once all configurations are in place, the machines are ready to communicate with each other over the network, enabling seamless interaction and data exchange.</p>
+<p><strong>Robot (master):</strong></p>
+<pre class="codehilite"><code>export ROS_MASTER_URI=http://robot:11311 
+roscore &amp;&amp; rosrun rospy_tutorials listener.py
+</code></pre>
+
+<p><strong>Workstation (slave):</strong></p>
+<pre class="codehilite"><code>export ROS_MASTER_URI=http://robot:11311 
+rosrun rospy_tutorials talker.py
+</code></pre>
+
+<p>In this article, we covered how to configure ROS to run across multiple machines, enabling seamless communication over a network. I hope this guide proves useful in setting up your ROS projects and facilitates efficient multi-machine operations.</p>
+<h2>References</h2>
+<p>[1] <a href="https://wiki.ros.org/ROS/Tutorials/MultipleMachines">https://wiki.ros.org/ROS/Tutorials/MultipleMachines</a></p>
+<p>[2] <a href="https://wiki.ros.org/ROS/NetworkSetup#Configuring_.2Fetc.2Fhosts">https://wiki.ros.org/ROS/NetworkSetup#Configuring_.2Fetc.2Fhosts</a></p><footer role="contentinfo">
+    <hr />
+    <small>
+        <a href="#top">&uarr; Top of the page</a><span>&nbsp;|&nbsp;</span><a href="/contact">Contact</a><span>&nbsp;|&nbsp;</span><a href="/build/rss.xml">RSS</a><br>
+        The content for this site is <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.<br>
+        The <a href="https://github.com/erdemuysalx/erdemuysalx.github.io">code for this website</a>
+        is <a href="https://github.com/erdemuysalx/erdemuysalx.github.io/blob/main/LICENSE">GNU GPLv3.0</a>.
+    </small>
+</footer>
+</body>
